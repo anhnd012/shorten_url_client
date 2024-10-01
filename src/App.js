@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
+console.log(apiUrl)
 
 function App() {
   const [longUrl, setLongUrl] = useState('');
