@@ -1,23 +1,57 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
+const API_BASE_URL = 'http://localhost:3000/api';
+
 function App() {
+  const [longUrl, setLongUrl] = useState('');
+  const [shortUrl, setShortUrl] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_BASE_URL}/urls`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ long_url: longUrl }),
+      });
+
+      console.log(response);
+      const data = await response.json();
+      setShortUrl(data.short_code);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shortUrl);
+    alert('Copied to clipboard!');
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>URL Shortener</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="url"
+          value={longUrl}
+          onChange={(e) => setLongUrl(e.target.value)}
+          placeholder="Enter long URL"
+          required
+        />
+        <button type="submit">Shorten</button>
+      </form>
+      {shortUrl && (
+        <div>
+          <p>Shortened URL: {shortUrl}</p>
+          <button onClick={copyToClipboard}>Copy to Clipboard</button>
+        </div>
+      )}
     </div>
   );
 }
