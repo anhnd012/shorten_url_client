@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 function App() {
   const [longUrl, setLongUrl] = useState('');
@@ -10,7 +10,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_BASE_URL}/urls`, {
+      const response = await fetch(`${apiUrl}/api/urls`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
